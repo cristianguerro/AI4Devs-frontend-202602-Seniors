@@ -32,10 +32,12 @@ app.use((req, res, next) => {
 });
 
 // Middleware para permitir CORS desde http://localhost:3000
-app.use(cors({
-  origin: 'http://localhost:3000',
-  credentials: true
-}));
+app.use(
+  cors({
+    origin: 'http://localhost:3000',
+    credentials: true,
+  }),
+);
 
 // Import and use candidateRoutes
 app.use('/candidates', candidateRoutes);
@@ -45,6 +47,7 @@ app.post('/upload', uploadFile);
 
 // Route to get candidates by position
 app.use('/position', positionRoutes);
+app.use('/positions', positionRoutes);
 
 app.use((req, res, next) => {
   console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`);
