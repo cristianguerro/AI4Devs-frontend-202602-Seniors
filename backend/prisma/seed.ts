@@ -39,10 +39,11 @@ async function main() {
       employmentType: 'Full-time',
       benefits: 'Health insurance, 401k, Paid time off',
       contactInfo: 'hr@lti.com',
-      requirements: '3+ years of experience in software development, knowledge in React and Node.js',
+      requirements:
+        '3+ years of experience in software development, knowledge in React and Node.js',
       responsibilities: 'Develop, test, and maintain software solutions.',
       companyDescription: 'LTI is a leading HR solutions provider.',
-      applicationDeadline: new Date('2024-12-31')
+      applicationDeadline: new Date('2024-12-31'),
     },
   });
 
@@ -61,10 +62,12 @@ async function main() {
       employmentType: 'Full-time',
       benefits: 'Health insurance, 401k, Paid time off, Stock options',
       contactInfo: 'hr@lti.com',
-      requirements: 'Master degree in Data Science or related field, proficiency in Python and R',
-      responsibilities: 'Analyze data sets to derive business insights and develop predictive models.',
+      requirements:
+        'Master degree in Data Science or related field, proficiency in Python and R',
+      responsibilities:
+        'Analyze data sets to derive business insights and develop predictive models.',
       companyDescription: 'LTI is a leading HR solutions provider.',
-      applicationDeadline: new Date('2024-12-31')
+      applicationDeadline: new Date('2024-12-31'),
     },
   });
 
@@ -171,7 +174,8 @@ async function main() {
           {
             company: 'Innovaciones Tech',
             position: 'Ingeniero de Software',
-            description: 'Desarrollo y mantenimiento de aplicaciones de software',
+            description:
+              'Desarrollo y mantenimiento de aplicaciones de software',
             startDate: new Date('2022-01-01'),
             endDate: new Date('2023-01-01'),
           },
@@ -193,7 +197,8 @@ async function main() {
   const interviewType1 = await prisma.interviewType.create({
     data: {
       name: 'HR Interview',
-      description: 'Assess overall fit, tech stack, salary range and availability',
+      description:
+        'Assess overall fit, tech stack, salary range and availability',
     },
   });
 
@@ -210,8 +215,6 @@ async function main() {
       description: 'Assess cultural fit and professional goals',
     },
   });
-
-  
 
   // Create Interview Steps
   const interviewStep1 = await prisma.interviewStep.create({
@@ -238,6 +241,33 @@ async function main() {
       interviewTypeId: interviewType3.id,
       name: 'Manager Interview',
       orderIndex: 2,
+    },
+  });
+
+  const interviewStep4 = await prisma.interviewStep.create({
+    data: {
+      interviewFlowId: interviewFlow2.id,
+      interviewTypeId: interviewType1.id,
+      name: 'Data Screening',
+      orderIndex: 1,
+    },
+  });
+
+  const interviewStep5 = await prisma.interviewStep.create({
+    data: {
+      interviewFlowId: interviewFlow2.id,
+      interviewTypeId: interviewType2.id,
+      name: 'Modeling Challenge',
+      orderIndex: 2,
+    },
+  });
+
+  const interviewStep6 = await prisma.interviewStep.create({
+    data: {
+      interviewFlowId: interviewFlow2.id,
+      interviewTypeId: interviewType3.id,
+      name: 'Stakeholder Interview',
+      orderIndex: 3,
     },
   });
 
@@ -275,7 +305,7 @@ async function main() {
       positionId: position2.id,
       candidateId: candidate1.id,
       applicationDate: new Date(),
-      currentInterviewStep: interviewStep2.id,
+      currentInterviewStep: interviewStep5.id,
     },
   });
 
@@ -297,7 +327,6 @@ async function main() {
     },
   });
 
-
   // Create Interviews
   await prisma.interview.createMany({
     data: [
@@ -312,7 +341,7 @@ async function main() {
       },
       {
         applicationId: application2.id,
-        interviewStepId: interviewStep1.id,
+        interviewStepId: interviewStep4.id,
         employeeId: employee1.id,
         interviewDate: new Date(),
         result: 'Passed',
@@ -327,7 +356,7 @@ async function main() {
         result: 'Passed',
         score: 4,
         notes: 'Good technical skills',
-      }
+      },
     ],
   });
 }
