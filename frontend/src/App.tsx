@@ -1,26 +1,23 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import AddCandidateForm from './components/AddCandidateForm';
+import PositionProcessDetail from './components/PositionProcessDetail';
+import Positions from './components/Positions';
+import RecruiterDashboard from './components/RecruiterDashboard';
 
-function App() {
+const App: React.FC = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<RecruiterDashboard />} />
+        <Route path="/add-candidate" element={<AddCandidateForm />} />
+        <Route path="/positions" element={<Positions />} />
+        <Route path="/positions/:positionId/process" element={<PositionProcessDetail />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </BrowserRouter>
   );
-}
+};
 
 export default App;
