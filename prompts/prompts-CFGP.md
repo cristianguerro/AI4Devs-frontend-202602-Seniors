@@ -78,3 +78,25 @@ Repo-local skills currently present in `.agents/skills`:
 - Output summary: Added a prompt logging template and documented the current AI tooling available in this workspace.
 - Validation: File initialized successfully.
 - Follow-up: Append new prompt entries below this section.
+
+<!-- TODO: Format this entry and complete it -->
+
+/opsx-continue
+
+@file:assets Here there are 2 images. Current positions screen and the object of this development a simple render of the position detail screen.
+From the positions screen when the user clicks on 'Ver proceso' it should show the position detail screen.
+Here user will visualize and manage the position process. It must be a kanban style page, where candidates are cards and the steps of the process are the columns. At any time user can change the phase where a candidate is just dragging their card to the desired phase.
+These are some details about the implementation:
+
+- There should be a title in the screen.
+- There should be a back button that allows the user to go back to positions screen.
+- Candidate card must show full name and average score.
+- must be responsive to small screens.
+
+Api endpoints for integration are in place:
+
+- GET /positions/:id/interviewFlow
+- GET /positions/:id/candidates
+- PUT /candidates/:id/stage
+
+For testing purposes use playwrite MCP server. And test and make sure the screen is being rendered correctly using Chrome dev tools MCP server.
