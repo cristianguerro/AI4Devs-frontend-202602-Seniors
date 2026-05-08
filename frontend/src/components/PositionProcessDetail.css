@@ -1,0 +1,122 @@
+:root {
+  --kanban-bg: linear-gradient(160deg, #e7e7eb 0%, #f2f3f5 55%, #e2e4e8 100%);
+  --kanban-column-bg: #eff0f3;
+  --kanban-card-bg: #fafbfc;
+  --kanban-border: #d8dbe2;
+  --kanban-accent: #1f5eb7;
+  --kanban-text: #17191f;
+  --kanban-muted: #6a717f;
+}
+
+.process-page-bg {
+  min-height: 100vh;
+  background: var(--kanban-bg);
+}
+
+.process-page-title {
+  color: var(--kanban-text);
+  font-size: clamp(1.6rem, 2.4vw, 2.4rem);
+  font-weight: 800;
+  letter-spacing: 0.01em;
+}
+
+.process-page-badge {
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 0.55rem 0.9rem;
+}
+
+.kanban-scroll {
+  overflow-x: auto;
+  padding-bottom: 1rem;
+}
+
+.kanban-grid {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(230px, 1fr);
+  gap: 1rem;
+  min-height: 60vh;
+}
+
+.kanban-column {
+  background: var(--kanban-column-bg);
+  border: 1px solid var(--kanban-border);
+  border-radius: 14px;
+  padding: 1rem;
+  box-shadow: 0 10px 24px -20px rgba(10, 18, 38, 0.75);
+}
+
+.kanban-column-title {
+  font-size: 1.15rem;
+  color: var(--kanban-text);
+  font-weight: 700;
+  margin-bottom: 0.9rem;
+}
+
+.kanban-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.kanban-empty {
+  border: 2px dashed var(--kanban-border);
+  border-radius: 12px;
+  color: var(--kanban-muted);
+  font-size: 0.95rem;
+  padding: 1.1rem;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.candidate-card {
+  background: var(--kanban-card-bg);
+  border: 1px solid var(--kanban-border);
+  border-radius: 12px;
+  cursor: grab;
+  transition:
+    transform 150ms ease,
+    box-shadow 150ms ease,
+    border-color 150ms ease;
+}
+
+.candidate-card:focus,
+.candidate-card:hover {
+  border-color: #9ab4df;
+  box-shadow: 0 12px 26px -22px rgba(10, 18, 38, 0.95);
+}
+
+.candidate-card--active {
+  transform: rotate(-1deg) scale(1.01);
+  box-shadow: 0 16px 30px -20px rgba(31, 94, 183, 0.55);
+}
+
+.candidate-card-name {
+  color: var(--kanban-text);
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.35rem;
+}
+
+.candidate-card-score {
+  color: var(--kanban-text);
+  margin-bottom: 0.55rem;
+}
+
+.candidate-card-label {
+  color: var(--kanban-muted);
+  font-size: 0.82rem;
+  margin-bottom: 0.2rem;
+}
+
+@media (max-width: 768px) {
+  .kanban-grid {
+    grid-auto-columns: minmax(250px, 78vw);
+  }
+
+  .process-page-title {
+    max-width: 90vw;
+    line-height: 1.2;
+  }
+}
