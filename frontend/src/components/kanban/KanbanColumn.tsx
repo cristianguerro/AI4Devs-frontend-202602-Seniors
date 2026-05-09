@@ -8,20 +8,24 @@ import {
 
 type Props = {
     step: InterviewStep;
+    steps: InterviewStep[];
     candidates: CandidateByPosition[];
     draggingApplicationId: number | null;
     onCardDragStart: (candidate: CandidateByPosition) => void;
     onCardDragEnd: () => void;
     onDropOnColumn: (step: InterviewStep) => void;
+    onMoveCandidate: (applicationId: number, targetStepId: number) => void;
 };
 
 const KanbanColumn: React.FC<Props> = ({
     step,
+    steps,
     candidates,
     draggingApplicationId,
     onCardDragStart,
     onCardDragEnd,
     onDropOnColumn,
+    onMoveCandidate,
 }) => {
     const [isOver, setIsOver] = useState(false);
 
@@ -56,9 +60,12 @@ const KanbanColumn: React.FC<Props> = ({
                         <CandidateCard
                             key={c.applicationId}
                             candidate={c}
+                            steps={steps}
+                            currentStepId={step.id}
                             isDragging={draggingApplicationId === c.applicationId}
                             onDragStart={onCardDragStart}
                             onDragEnd={onCardDragEnd}
+                            onMoveCandidate={onMoveCandidate}
                         />
                     ))
                 )}

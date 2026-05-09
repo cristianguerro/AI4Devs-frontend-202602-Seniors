@@ -1,19 +1,43 @@
 import React from 'react';
 import { Card } from 'react-bootstrap';
 import { StarFill, Star } from 'react-bootstrap-icons';
-import { CandidateByPosition } from '../../services/positionService';
+import {
+    CandidateByPosition,
+    InterviewStep,
+} from '../../services/positionService';
 
 type Props = {
     candidate: CandidateByPosition;
+    steps: InterviewStep[];
+    currentStepId: number;
     isDragging: boolean;
     onDragStart: (candidate: CandidateByPosition) => void;
     onDragEnd: () => void;
+    onMoveCandidate: (applicationId: number, targetStepId: number) => void;
 };
 
 const MAX_SCORE = 5;
 
-const CandidateCard: React.FC<Props> = ({ candidate, isDragging, onDragStart, onDragEnd }) => {
+const CandidateCard: React.FC<Props> = ({
+    candidate,
+    steps,
+    currentStepId,
+    isDragging,
+    onDragStart,
+    onDragEnd,
+    onMoveCandidate,
+}) => {
     const filled = Math.max(0, Math.min(MAX_SCORE, Math.round(candidate.averageScore || 0)));
+
+    const handleStageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const targetStepId = Number(e.target.value);
+        if (Number.isNaN(targetStepId) || targetStepId === currentStepId) return;
+        onMoveCandidate(candidate.applicationId, targetStepId);
+    };
+
+    // Stop drag-related events from bubbling so interacting with the select
+    // never triggers the card's HTML5 drag.
+    const stopDragPropagation = (e: React.SyntheticEvent) => e.stopPropagation();
 
     return (
         <Card
@@ -42,6 +66,22 @@ const CandidateCard: React.FC<Props> = ({ candidate, isDragging, onDragStart, on
                         ),
                     )}
                 </div>
+                <select
+                    className="form-select form-select-sm kanban-card-select mt-2"
+                    aria-label={`Cambiar fase de ${candidate.fullName}`}
+                    value={currentStepId}
+                    onChange={handleStageChange}
+                    onMouseDown={stopDragPropagation}
+                    onClick={stopDragPropagation}
+                    onDragStart={stopDragPropagation}
+                    draggable={false}
+                >
+                    {steps.map((s) => (
+                        <option key={s.id} value={s.id}>
+                            {s.name}
+                        </option>
+                    ))}
+                </select>
             </Card.Body>
         </Card>
     );

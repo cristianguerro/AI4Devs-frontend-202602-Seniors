@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import KanbanColumn from './KanbanColumn';
 import {
     CandidateByPosition,
@@ -37,6 +37,37 @@ const KanbanBoard: React.FC<Props> = ({
         return map;
     }, [orderedSteps, candidates]);
 
+    const moveCandidate = useCallback(
+        async (applicationId: number, targetStepId: number) => {
+            const targetStep = orderedSteps.find((s) => s.id === targetStepId);
+            if (!targetStep) return;
+            const moving = candidates.find((c) => c.applicationId === applicationId);
+            if (!moving) return;
+            if (moving.currentInterviewStep === targetStep.name) return;
+
+            const previous = candidates;
+            const optimistic = candidates.map((c) =>
+                c.applicationId === applicationId
+                    ? { ...c, currentInterviewStep: targetStep.name }
+                    : c,
+            );
+            onCandidatesChange(optimistic);
+            onError(null);
+
+            try {
+                await updateCandidateStage(moving.id, moving.applicationId, targetStep.id);
+            } catch (err) {
+                onCandidatesChange(previous);
+                const message =
+                    err instanceof Error
+                        ? err.message
+                        : 'No se pudo actualizar la fase del candidato';
+                onError(message);
+            }
+        },
+        [orderedSteps, candidates, onCandidatesChange, onError],
+    );
+
     const handleDragStart = (candidate: CandidateByPosition) => {
         setDraggingApplicationId(candidate.applicationId);
         onError(null);
@@ -46,30 +77,11 @@ const KanbanBoard: React.FC<Props> = ({
         setDraggingApplicationId(null);
     };
 
-    const handleDrop = async (targetStep: InterviewStep) => {
-        const moving = candidates.find((c) => c.applicationId === draggingApplicationId);
+    const handleDrop = (targetStep: InterviewStep) => {
+        const id = draggingApplicationId;
         setDraggingApplicationId(null);
-        if (!moving) return;
-        if (moving.currentInterviewStep === targetStep.name) return;
-
-        const previous = candidates;
-        const optimistic = candidates.map((c) =>
-            c.applicationId === moving.applicationId
-                ? { ...c, currentInterviewStep: targetStep.name }
-                : c,
-        );
-        onCandidatesChange(optimistic);
-
-        try {
-            await updateCandidateStage(moving.id, moving.applicationId, targetStep.id);
-        } catch (err) {
-            onCandidatesChange(previous);
-            const message =
-                err instanceof Error
-                    ? err.message
-                    : 'No se pudo actualizar la fase del candidato';
-            onError(message);
-        }
+        if (id == null) return;
+        void moveCandidate(id, targetStep.id);
     };
 
     return (
@@ -78,11 +90,13 @@ const KanbanBoard: React.FC<Props> = ({
                 <KanbanColumn
                     key={step.id}
                     step={step}
+                    steps={orderedSteps}
                     candidates={candidatesByStepName.get(step.name) ?? []}
                     draggingApplicationId={draggingApplicationId}
                     onCardDragStart={handleDragStart}
                     onCardDragEnd={handleDragEnd}
                     onDropOnColumn={handleDrop}
+                    onMoveCandidate={moveCandidate}
                 />
             ))}
         </div>

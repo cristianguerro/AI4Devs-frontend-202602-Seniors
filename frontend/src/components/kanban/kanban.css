@@ -77,6 +77,11 @@
     font-style: italic;
 }
 
+.kanban-card-select {
+    cursor: pointer;
+    font-size: 0.8rem;
+}
+
 @media (max-width: 768px) {
     .kanban-board {
         flex-direction: column;
