@@ -189,6 +189,46 @@ async function main() {
     },
   });
 
+  const candidate4 = await prisma.candidate.create({
+    data: {
+      firstName: 'Lucia',
+      lastName: 'Perez',
+      email: 'lucia.perez@example.com',
+      phone: '6677889900',
+      address: '321 Oak St',
+      educations: {
+        create: [
+          {
+            institution: 'University B',
+            title: 'BSc Software Engineering',
+            startDate: new Date('2014-09-01'),
+            endDate: new Date('2018-06-01'),
+          },
+        ],
+      },
+      workExperiences: {
+        create: [
+          {
+            company: 'CloudWorks',
+            position: 'Frontend Engineer',
+            description: 'Built user interfaces for SaaS products',
+            startDate: new Date('2018-07-01'),
+            endDate: new Date('2023-03-01'),
+          },
+        ],
+      },
+      resumes: {
+        create: [
+          {
+            filePath: '/resumes/lucia_perez.pdf',
+            fileType: 'application/pdf',
+            uploadDate: new Date(),
+          },
+        ],
+      },
+    },
+  });
+
   // Create Interview Types
   const interviewType1 = await prisma.interviewType.create({
     data: {
@@ -218,7 +258,7 @@ async function main() {
     data: {
       interviewFlowId: interviewFlow1.id,
       interviewTypeId: interviewType1.id,
-      name: 'Initial Screening',
+      name: 'Screening',
       orderIndex: 1,
     },
   });
@@ -236,8 +276,17 @@ async function main() {
     data: {
       interviewFlowId: interviewFlow1.id,
       interviewTypeId: interviewType3.id,
+      name: 'Cultural Interview',
+      orderIndex: 3,
+    },
+  });
+
+  const interviewStep4 = await prisma.interviewStep.create({
+    data: {
+      interviewFlowId: interviewFlow1.id,
+      interviewTypeId: interviewType3.id,
       name: 'Manager Interview',
-      orderIndex: 2,
+      orderIndex: 4,
     },
   });
 
@@ -266,7 +315,7 @@ async function main() {
       positionId: position1.id,
       candidateId: candidate1.id,
       applicationDate: new Date(),
-      currentInterviewStep: interviewStep2.id,
+      currentInterviewStep: interviewStep1.id,
     },
   });
 
@@ -293,7 +342,16 @@ async function main() {
       positionId: position1.id,
       candidateId: candidate3.id,
       applicationDate: new Date(),
-      currentInterviewStep: interviewStep1.id,
+      currentInterviewStep: interviewStep3.id,
+    },
+  });
+
+  const application5 = await prisma.application.create({
+    data: {
+      positionId: position1.id,
+      candidateId: candidate4.id,
+      applicationDate: new Date(),
+      currentInterviewStep: interviewStep4.id,
     },
   });
 
@@ -327,6 +385,24 @@ async function main() {
         result: 'Passed',
         score: 4,
         notes: 'Good technical skills',
+      },
+      {
+        applicationId: application4.id,
+        interviewStepId: interviewStep2.id,
+        employeeId: employee1.id,
+        interviewDate: new Date(),
+        result: 'Passed',
+        score: 3,
+        notes: 'Solid experience and communication skills',
+      },
+      {
+        applicationId: application5.id,
+        interviewStepId: interviewStep3.id,
+        employeeId: employee2.id,
+        interviewDate: new Date(),
+        result: 'Passed',
+        score: 5,
+        notes: 'Strong final interview with the hiring manager',
       }
     ],
   });
